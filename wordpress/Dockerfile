@@ -6,8 +6,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 RUN \
-    chmod +x /etc/services.d/nginx/* \
-    && apk add --no-cache \
+    apk add --no-cache \
         mariadb-client=10.11.4-r0 \
         nginx=1.24.0-r6 \
         php81-curl=8.1.20-r0 \
@@ -33,7 +32,8 @@ RUN \
 COPY rootfs /
 
 RUN \
-    sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/wordpress/wp-config.php \
+    chmod +x /etc/services.d/nginx/* \
+    && sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/wp-config.php \
