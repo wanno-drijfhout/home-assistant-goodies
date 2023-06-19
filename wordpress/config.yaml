@@ -1,6 +1,6 @@
 name: WordPress
 description: "WordPress is a free and open source blogging tool and a content management system."
-version: "1.0.10"
+version: "1.0.11"
 slug: wordpress
 init: false
 arch:
@@ -13,12 +13,11 @@ url: https://github.com/wanno-drijfhout/home-assistant-goodies/blob/master/wordp
 startup: application
 webui: http://[HOST]:[PORT:8090]/wp-admin
 ports:
-  80/tcp: 8090
+  80/tcp: 8099
 ports_description:
   80/tcp: "HTTP"
 ingress: true
 ingress_stream: true
-host_network: true
 map:
   - share:rw
   - media:rw
