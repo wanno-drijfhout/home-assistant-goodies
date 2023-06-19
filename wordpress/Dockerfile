@@ -4,12 +4,10 @@ FROM ${BUILD_FROM}
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-
 # Copy root filesystem
 COPY rootfs /
 
 # Setup base
-# hadolint ignore=DL3003
 RUN \
     apk add --no-cache \
         mariadb-client=10.11.4-r0 \
@@ -25,8 +23,8 @@ RUN \
         php81-session=8.1.20-r0 \
         php81-xml=8.1.20-r0 \
         php81-zip=8.1.20-r0 \
-        php81=8.1.20-r0 \
-    \
+        php81=8.1.20-r0
+RUN \
     && mkdir /var/www/wordpress \
     && curl -L -s \
         "https://wordpress.org/latest.tar.gz" \
