@@ -4,9 +4,6 @@ FROM ${BUILD_FROM}
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Copy root filesystem
-COPY rootfs /
-
 # Setup base
 RUN \
     apk add --no-cache \
@@ -23,12 +20,15 @@ RUN \
         php81-session=8.1.20-r0 \
         php81-xml=8.1.20-r0 \
         php81-zip=8.1.20-r0 \
-        php81=8.1.20-r0
+        php81=8.1.20-r0 \
+    && mkdir -p /var/www/wordpress
+    
 RUN \
-    && mkdir -p /var/www/wordpress \
-    && curl -L -s \
-        "https://wordpress.org/latest.tar.gz" \
-        | tar zxvf - --strip 1 -C /var/www/wordpress
+    curl -L -s "https://wordpress.org/latest.tar.gz" \
+      | tar zxvf - --strip 1 -C /var/www/wordpress
+
+# Copy root filesystem
+COPY rootfs /
 
 RUN \
     # && mv /var/www/wordpress/wp-config{-sample,}.php \
