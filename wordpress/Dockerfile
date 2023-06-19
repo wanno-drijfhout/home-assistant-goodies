@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 RUN \
-    chmod +x /etc/services.d/nginx/*
+    chmod +x /etc/services.d/nginx/* \
     && apk add --no-cache \
         mariadb-client=10.11.4-r0 \
         nginx=1.24.0-r6 \
