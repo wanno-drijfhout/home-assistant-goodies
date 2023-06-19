@@ -4,12 +4,8 @@ version: "1.0.0"
 slug: "wordpress"
 init: false
 arch:
+  - aarch64
   - amd64
-  - armv5
-  - armv6
+  - armhf
   - armv7
-  - armv8
   - i386
-  - mips64le
-  - ppc64le
-  - s390x
