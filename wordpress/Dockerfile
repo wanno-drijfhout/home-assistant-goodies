@@ -6,7 +6,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 RUN \
-    apk add --no-cache \
+    chmod +x /etc/services.d/nginx/*
+    && apk add --no-cache \
         mariadb-client=10.11.4-r0 \
         nginx=1.24.0-r6 \
         php81-curl=8.1.20-r0 \
@@ -36,10 +37,8 @@ RUN \
     && sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/wp-config.php
-
-RUN \
-    curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
-      | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/wp-config.php 
+    && curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
+       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/wp-config.php 
 
 # Build arguments
 ARG BUILD_ARCH
