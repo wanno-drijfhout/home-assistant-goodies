@@ -41,11 +41,6 @@ RUN \
     curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/wp-config.php 
 
-RUN chmod +x /run.sh
-
-ENTRYPOINT []
-CMD ["/run.sh"]
-
 # Build arguments
 ARG BUILD_ARCH
 ARG BUILD_DATE
