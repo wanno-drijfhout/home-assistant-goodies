@@ -9,15 +9,6 @@ arch:
   - armhf
   - armv7
   - i386
-  - amd64
-  - arm32v5
-  - arm32v6
-  - arm32v7
-  - arm64v8
-  - i386
-  - mips64le
-  - ppc64le
-  - s390x
 url: https://github.com/wanno-drijfhout/home-assistant-goodies/blob/master/wordpress/Readme.md
 startup: application
 webui: http://[HOST]:[PORT:8090]/wp-admin
@@ -37,7 +28,7 @@ environment:
   WORDPRESS_DB_USER: wordpress
   WORDPRESS_DB_PASSWORD: ""
 services:
-  - mariadb:need
+  - mysql:need
 panel_icon: mdi:wordpress
 stage: experimental
 options:
@@ -51,3 +42,4 @@ schema:
   db_username: str
   db_password: password
 #codenotary: github.com@wanno.eu
+hassio_role: default
