@@ -4,6 +4,10 @@ FROM ${BUILD_FROM}
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+
+# Copy root filesystem
+COPY rootfs /
+
 # Setup base
 # hadolint ignore=DL3003
 RUN \
@@ -27,11 +31,17 @@ RUN \
     && curl -L -s \
         "https://wordpress.org/latest.tar.gz" \
         | tar zxvf - --strip 1 -C /var/www/wordpress \
-    && mv /var/www/wordpress/wp-config{-sample,}.php \
+    # && mv /var/www/wordpress/wp-config{-sample,}.php \
     && sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/wordpress/wp-config.php \
-    && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/wp-config.php
+    && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/wp-config.php \
+    # && sed -i '/\/\* Add any custom values between this line and the "stop editing" line. \*\//r proxy-ssl.php' /var/www/wordpress/wp-config.php
+    && curl -s https://api.wordpress.org/secret-key/1.1/salt/ | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/wp-config.php 
+
+
+ENTRYPOINT []
+CMD ["/run.sh"]
 
 # Build arguments
 ARG BUILD_ARCH

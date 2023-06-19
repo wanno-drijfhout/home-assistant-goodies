@@ -1,6 +1,6 @@
 name: Wordpress
 description: "WordPress is a free and open source blogging tool and a content management system."
-version: "1.0.3"
+version: "1.0.4"
 slug: wordpress
 init: false
 arch:
@@ -16,8 +16,8 @@ ports:
   80/tcp: 8090
 ports_description:
   80/tcp: "HTTP"
-# ingress: true
-# ingress_stream: true
+ingress: true
+ingress_stream: true
 host_network: true
 map:
   - share:rw
@@ -36,7 +36,6 @@ options:
   db_username: wordpress
   db_password: null
 schema:
-  port: port
   db_name: str
   db_username: str
   db_password: password
