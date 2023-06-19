@@ -1,7 +1,7 @@
-name: "Wordpress"
+name: Wordpress
 description: "WordPress is a free and open source blogging tool and a content management system."
 version: "1.0.0"
-slug: "wordpress"
+slug: wordpress
 init: false
 arch:
   - aarch64
@@ -9,3 +9,37 @@ arch:
   - armhf
   - armv7
   - i386
+url: https://github.com/wanno-drijfhout/home-assistant-goodies/blob/master/wordpress/Readme.md
+startup: application
+webui: http://[HOST]:[PORT:8090]/wp-admin
+ports:
+  8090/tcp: 80
+ports_description:
+  8090/tcp: "HTTP"
+# ingress: true
+# ingress_stream: true
+host_network: true
+map:
+  - share:rw
+  - media:rw
+environment:
+  WORDPRESS_DB_HOST: core-mariadb:3306
+  WORDPRESS_DB_NAME: wordpress
+  WORDPRESS_DB_USER: wordpress
+  WORDPRESS_DB_PASSWORD: ""
+services:
+  - mariadb:need
+ingress: true
+panel_icon: mdi:wordpress
+stage: experimental
+options:
+  port: 8090
+  db_name: wordpress
+  db_username: wordpress
+  db_password: null
+schema:
+  port: port
+  db_name: str
+  db_username: str
+  db_password: password
+codenotary: github.com@wanno.eu
