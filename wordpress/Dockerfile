@@ -25,7 +25,7 @@ RUN \
         php81-zip=8.1.20-r0 \
         php81=8.1.20-r0
 RUN \
-    && mkdir /var/www/wordpress \
+    && mkdir -p /var/www/wordpress \
     && curl -L -s \
         "https://wordpress.org/latest.tar.gz" \
         | tar zxvf - --strip 1 -C /var/www/wordpress
