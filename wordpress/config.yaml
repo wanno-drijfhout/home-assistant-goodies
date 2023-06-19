@@ -13,9 +13,9 @@ url: https://github.com/wanno-drijfhout/home-assistant-goodies/blob/master/wordp
 startup: application
 webui: http://[HOST]:[PORT:8090]/wp-admin
 ports:
-  8090/tcp: 80
+  80/tcp: 8090
 ports_description:
-  8090/tcp: "HTTP"
+  80/tcp: "HTTP"
 # ingress: true
 # ingress_stream: true
 host_network: true
@@ -32,7 +32,6 @@ services:
 panel_icon: mdi:wordpress
 stage: experimental
 options:
-  port: 8090
   db_name: wordpress
   db_username: wordpress
   db_password: null
