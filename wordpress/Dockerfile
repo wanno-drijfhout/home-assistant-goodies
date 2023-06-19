@@ -1,44 +1,32 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.0.1
+# hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
-# Set shell
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# Create directory for apache2 to store PID file
+RUN mkdir /run/apache2
 
-# Setup base
-RUN \
-    apk add --no-cache \
-        mariadb-client=10.11.4-r0 \
-        nginx=1.24.0-r6 \
-        php81-curl=8.1.20-r0 \
-        php81-fpm=8.1.20-r0 \
-        php81-gd=8.1.20-r0 \
-        php81-iconv=8.1.20-r0 \
-        php81-mbstring=8.1.20-r0 \
-        php81-mysqli=8.1.20-r0 \
-        php81-opcache=8.1.20-r0 \
-        php81-openssl=8.1.20-r0 \
-        php81-session=8.1.20-r0 \
-        php81-xml=8.1.20-r0 \
-        php81-zip=8.1.20-r0 \
-        php81=8.1.20-r0 \
-    && mkdir -p /var/www/wordpress/htdocs
-    
-RUN \
-    curl -L -s "https://wordpress.org/latest.tar.gz" \
-      | tar zxvf - --strip 1 -C /var/www/wordpress/htdocs
+RUN apk --no-cache add apache2 php81-apache2 libxml2-dev apache2-utils apache2-mod-wsgi apache2-ssl
+RUN apk --no-cache add php81 php81-dev php81-fpm php81-mysqli php81-opcache php81-gd zlib php81-curl php81-phar php81-mbstring php81-zip php81-pdo php81-pdo_mysql php81-iconv php81-dom php81-session php81-intl php81-soap php81-fileinfo php81-xml php81-ctype php81-pecl-xdebug php81-pdo_sqlite
+#RUN apk --no-cache add mosquitto mosquitto-dev
+RUN apk --no-cache add mariadb-client
 
-# Copy root filesystem
-# Includes a version of /var/www/wordpress/htdocs/wp-config{-sample,}.php customised for reverse proxying
-COPY rootfs /
+#musl-locales/php-locales
+RUN apk add --no-cache cmake make musl-dev gcc gettext-dev libintl
+RUN wget https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip \
+    && unzip musl-locales-master.zip \
+    && cd musl-locales-master \
+    && cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && make && make install \
+    && cd .. && rm -r musl-locales-master
 
-RUN \
-    chmod +x /etc/services.d/nginx/* \
-    && sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/wordpress/htdocs/wp-config.php \
-    && sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/wordpress/htdocs/wp-config.php \
-    && sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/wordpress/htdocs/wp-config.php \
-    && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/htdocs/wp-config.php \
-    && curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
-       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/htdocs/wp-config.php 
+#Configure Logging
+RUN sed -i -r 's@Errorlog .*@Errorlog /dev/stderr@i' /etc/apache2/httpd.conf
+RUN echo "Transferlog /dev/stdout" >> /etc/apache2/httpd.conf
+
+# Copy data for add-on
+COPY run.sh /
+COPY wp-config.php /
+RUN chmod a+x /run.sh
+CMD [ "/run.sh" ]
 
 # Build arguments
 ARG BUILD_ARCH

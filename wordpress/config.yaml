@@ -1,6 +1,6 @@
 name: WordPress
 description: "WordPress is a free and open source blogging tool and a content management system."
-version: "1.0.22"
+version: "1.0.23"
 slug: wordpress
 init: false
 arch:
