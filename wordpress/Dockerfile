@@ -21,24 +21,24 @@ RUN \
         php81-xml=8.1.20-r0 \
         php81-zip=8.1.20-r0 \
         php81=8.1.20-r0 \
-    && mkdir -p /var/www/localhost/htdocs
+    && mkdir -p /var/www/wordpress/htdocs
     
 RUN \
     curl -L -s "https://wordpress.org/latest.tar.gz" \
-      | tar zxvf - --strip 1 -C /var/www/localhost/htdocs
+      | tar zxvf - --strip 1 -C /var/www/wordpress/htdocs
 
 # Copy root filesystem
-# Includes a version of /var/www/localhost/htdocs/wp-config{-sample,}.php customised for reverse proxying
+# Includes a version of /var/www/wordpress/htdocs/wp-config{-sample,}.php customised for reverse proxying
 COPY rootfs /
 
 RUN \
     chmod +x /etc/services.d/nginx/* \
-    && sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/localhost/htdocs/wp-config.php \
-    && sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/localhost/htdocs/wp-config.php \
-    && sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/localhost/htdocs/wp-config.php \
-    && sed -i 's/localhost/core_mariadb:3306/g' /var/www/localhost/htdocs/wp-config.php \
+    && sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/wordpress/htdocs/wp-config.php \
+    && sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/wordpress/htdocs/wp-config.php \
+    && sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/wordpress/htdocs/wp-config.php \
+    && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/htdocs/wp-config.php \
     && curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
-       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/localhost/htdocs/wp-config.php 
+       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/htdocs/wp-config.php 
 
 # Build arguments
 ARG BUILD_ARCH
