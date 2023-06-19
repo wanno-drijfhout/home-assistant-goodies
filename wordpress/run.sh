@@ -18,10 +18,27 @@ if [ ! -d $DocumentRoot ]; then
     cp /wp-config.php .
     sed -i "s/database_name_here/${db_name}/g" wp-config.php
     sed -i "s/username_here/${db_username}/g" wp-config.php
-    sed -i "s/password_here/${db_password})/g" wp-config.php
+    sed -i "s/password_here/${db_password}/g" wp-config.php
     sed -i "s/localhost/core_mariadb:3306/g" wp-config.php
-    curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
-       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i wp-config.php 
+    
+    # Step 1: Remove the existing block and leave a placeholder
+    sed -i '\~/**#@+~,\~/**#@-~c\
+    /* PLACEHOLDER */' wp-config.php
+
+    # Step 2: Query the secret-key service and store the result in a variable
+    KEYS_AND_SALTS=$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
+
+    # Step 3: Replace the placeholder with the new keys and salts
+    sed -i '/\/\* PLACEHOLDER \*\//{
+    r /dev/stdin
+    d
+    }' wp-config.php <<< "$KEYS_AND_SALTS"
+
+
+
+
+
+
     
     echo "Configured."
 else
