@@ -24,6 +24,7 @@ RUN echo "Transferlog /dev/stdout" >> /etc/apache2/httpd.conf
 
 # Copy data for add-on
 COPY run.sh /
+COPY .htaccess /
 COPY wp-config.php /
 RUN chmod a+x /run.sh
 CMD [ "/run.sh" ]

@@ -36,20 +36,27 @@ if [ ! -d $DocumentRoot ]; then
 
     echo "Setting writing permissions for apache..."
     chown -R 100:101 .
+    
+    echo "Adding .htaccess..."
+    cp /.htaccess .
 
     echo "Enabling PHP extensions..."
     echo "extension=exif" > /etc/php81/conf.d/01_exif.ini
     echo "extension=imagick" > /etc/php81/conf.d/02_imagick.ini
-    
-    echo "Configured."
+    mkdir /usr/lib/php81/modules/opcache # Don't know why this is needed, but just copied it
 else
     echo "Found existing folder"
 fi
 
+echo "Linking and owning Apache document root..."    
 rm -rf /var/www/localhost/htdocs
 ln -s $DocumentRoot /var/www/localhost/htdocs
+chown -R 100:101 /var/www/localhost  # Apache ids
 
-mkdir /usr/lib/php81/modules/opcache
+echo "Changing Apache configuration..."
+sed -i 's/^#LoadModule rewrite_module modules\/mod_rewrite.so/LoadModule rewrite_module modules\/mod_rewrite.so/' /etc/apache2/httpd.conf
+sed -i '/<Directory "\/var\/www\/localhost\/htdocs">/,/AllowOverride None/ s/AllowOverride None/AllowOverride All/' /etc/apache2/httpd.conf
+
 
 echo "Starting Apache2..."
 exec /usr/sbin/httpd -D FOREGROUND
