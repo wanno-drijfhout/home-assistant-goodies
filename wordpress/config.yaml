@@ -29,7 +29,6 @@ environment:
   WORDPRESS_DB_PASSWORD: ""
 services:
   - mariadb:need
-ingress: true
 panel_icon: mdi:wordpress
 stage: experimental
 options:
@@ -42,4 +41,4 @@ schema:
   db_name: str
   db_username: str
   db_password: password
-codenotary: github.com@wanno.eu
+#codenotary: github.com@wanno.eu
