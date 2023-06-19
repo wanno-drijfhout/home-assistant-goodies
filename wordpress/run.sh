@@ -1,5 +1,9 @@
 #!/usr/bin/with-contenv bashio
 
+db_name=$(bashio::config "db_name")
+db_username=$(bashio::config "db_username")
+db_password=$(bashio::config "db_password")
+
 DocumentRoot=/share/wordpress
 echo "Document root: ${DocumentRoot}."
 if [ ! -d $DocumentRoot ]; then
@@ -8,16 +12,16 @@ if [ ! -d $DocumentRoot ]; then
 
     echo "Downloading new WordPress installation..."
     curl -L -s "https://wordpress.org/latest.tar.gz" \
-      | tar zxvf - --strip 1 -C $DocumentRoot
+      | tar zxf - --strip 1 -C $DocumentRoot
 
     echo "Adapting configuration..."
     cp /wp-config.php .
-    sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/localhost/htdocs/wp-config.php
-    sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/localhost/htdocs/wp-config.php
-    sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/localhost/htdocs/wp-config.php
-    sed -i 's/localhost/core_mariadb:3306/g' /var/www/localhost/htdocs/wp-config.php
+    sed -i "s/database_name_here/${db_name}/g" wp-config.php
+    sed -i "s/username_here/${db_username}/g" wp-config.php
+    sed -i "s/password_here/${db_password})/g" wp-config.php
+    sed -i "s/localhost/core_mariadb:3306/g" wp-config.php
     curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
-       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/localhost/htdocs/wp-config.php 
+       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i wp-config.php 
     
     echo "Configured."
 else
