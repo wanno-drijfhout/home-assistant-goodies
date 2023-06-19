@@ -1,4 +1,3 @@
-# https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
-name: 'Wanno\'s Home Assistant goodies'
-url: 'https://github.com/wanno-drijfhout/home-assistant-goodies'
+name: Wanno's Home Assistant goodies
+url: https://github.com/wanno-drijfhout/home-assistant-goodies
 maintainer: Wanno Drijfhout <github.com@wanno.eu>
