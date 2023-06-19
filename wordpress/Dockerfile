@@ -36,7 +36,7 @@ RUN \
     sed -i 's/database_name_here/(bashio::config "db_name")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/username_here/(bashio::config "db_username")/g' /var/www/wordpress/wp-config.php \
     && sed -i 's/password_here/(bashio::config "db_password")/g' /var/www/wordpress/wp-config.php \
-    && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/wp-config.php
+    && sed -i 's/localhost/core_mariadb:3306/g' /var/www/wordpress/wp-config.php \
     && curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
        | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/wp-config.php 
 
