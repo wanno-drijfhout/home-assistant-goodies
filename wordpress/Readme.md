@@ -11,6 +11,10 @@ This add-on deploys Wordpress on Home Assistant.
 
 The add-on creates a folder `/share/wordpress` if it doesn't exist yet, and subsequently downloads and configures the latest version of WordPress.
 
+## Known issues
+
+- The `/wp-admin/site-health.php` results indicate optional modules `exif` and `imagick` are not installed or disabled. I do not know why.
+
 ## Credits
 
 Inspiration from:

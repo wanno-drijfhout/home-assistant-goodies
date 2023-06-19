@@ -19,7 +19,7 @@ if [ ! -d $DocumentRoot ]; then
     sed -i "s/database_name_here/${db_name}/g" wp-config.php
     sed -i "s/username_here/${db_username}/g" wp-config.php
     sed -i "s/password_here/${db_password}/g" wp-config.php
-    sed -i "s/localhost/core_mariadb:3306/g" wp-config.php
+    sed -i "s/localhost/core-mariadb:3306/g" wp-config.php
     
     # Step 1: Remove the existing block and leave a placeholder
     sed -i '\~/**#@+~,\~/**#@-~c\
@@ -34,11 +34,12 @@ if [ ! -d $DocumentRoot ]; then
     d
     }' wp-config.php <<< "$KEYS_AND_SALTS"
 
+    echo "Setting writing permissions for apache..."
+    chown -R 100:101 .
 
-
-
-
-
+    echo "Enabling PHP extensions..."
+    echo "extension=exif" > /etc/php81/conf.d/01_exif.ini
+    echo "extension=imagick" > /etc/php81/conf.d/02_imagick.ini
     
     echo "Configured."
 else
