@@ -1,8 +1,9 @@
 build_from:
-  amd64: "https://hub.docker.com/r/amd64/wordpress/"
-  armv7: "https://hub.docker.com/r/arm32v7/wordpress/"
-  aarch64: "https://hub.docker.com/r/arm64v8/wordpress/"
-  i386: "https://hub.docker.com/r/i386/wordpress/"
+  aarch64: ghcr.io/hassio-addons/base/aarch64:11.1.1
+  amd64: ghcr.io/hassio-addons/base/amd64:11.1.1
+  armhf: ghcr.io/hassio-addons/base/armhf:11.1.1
+  armv7: ghcr.io/hassio-addons/base/armv7:11.1.1
+  i386: ghcr.io/hassio-addons/base/i386:11.1.1
 codenotary:
   signer: "github.com@wanno.eu"
 args:
