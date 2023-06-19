@@ -41,6 +41,7 @@ RUN \
     curl -s https://api.wordpress.org/secret-key/1.1/salt/ \
       | sed -e '/\/\*\*#@+\*/,/\/\*\*#@-\*\//d' -e '/\/\*\*#@-\*\//r /dev/stdin' -i /var/www/wordpress/wp-config.php 
 
+RUN chmod +x /run.sh
 
 ENTRYPOINT []
 CMD ["/run.sh"]
@@ -53,14 +54,14 @@ ARG BUILD_VERSION
 
 # Labels
 LABEL \
-    io.hass.name="Wordpress for ${BUILD_ARCH}" \
-    io.hass.description="Home Assistant Unofficial Add-on: Wordpress for ${BUILD_ARCH}" \
+    io.hass.name="WordPress for ${BUILD_ARCH}" \
+    io.hass.description="Home Assistant Unofficial Add-on: WordPress for ${BUILD_ARCH}" \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
     maintainer="Wanno Drijfhout <github.com@wanno.eu>" \
-    org.opencontainers.image.title="Wordpress for ${BUILD_ARCH}" \
-    org.opencontainers.image.description="Home Assistant Unofficial Add-on: Wordpress for ${BUILD_ARCH}" \
+    org.opencontainers.image.title="WordPress for ${BUILD_ARCH}" \
+    org.opencontainers.image.description="Home Assistant Unofficial Add-on: WordPress for ${BUILD_ARCH}" \
     org.opencontainers.image.vendor="Wanno's Home Assistant goodies" \
     org.opencontainers.image.authors="Wanno Drijfhout <github.com@wanno.eu>" \
     org.opencontainers.image.licenses="MIT" \
