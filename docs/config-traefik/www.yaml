@@ -1,0 +1,24 @@
+http:
+  routers:
+    wwwRouter:
+      entryPoints: ["web-secure"]
+      rule: 'Host(`{{ env "DOMAIN" }}`)'
+      #rule: 'HostRegexp(`{{ env "DOMAIN" }}`, `{subdomain:[a-z]+}.{{ env "DOMAIN" }}`)'
+      tls:
+        certResolver: le
+      # middlewares: ["wwwRedirect"]
+      service: wwwService
+
+  # middlewares:
+  #   wwwRedirect:
+  #     redirectRegex:
+  #       permanent: true
+  #       regex: 'https://{{ env "DOMAIN" }}/(.*)'
+  #       replacement: 'https://{{ env "DOMAIN" }}/index.php?/${1}'
+
+
+  services:
+    wwwService:
+      loadBalancer:
+        servers:
+          - url: 'http://{{ env "HOSTNAME_HA" }}:8080'
