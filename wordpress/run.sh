@@ -44,6 +44,9 @@ if [ ! -d $DocumentRoot ]; then
     echo "extension=exif" > /etc/php81/conf.d/01_exif.ini
     echo "extension=imagick" > /etc/php81/conf.d/02_imagick.ini
     mkdir /usr/lib/php81/modules/opcache # Don't know why this is needed, but just copied it
+    
+    sed -i 's/^post_max_size = .*/post_max_size = 64M/' /etc/php81/php.ini
+    sed -i 's/^upload_max_filesize = .*/upload_max_filesize = 32M/' /etc/php81/php.ini
 else
     echo "Found existing folder"
 fi
