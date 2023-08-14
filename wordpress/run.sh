@@ -48,6 +48,9 @@ else
     echo "Found existing folder"
 fi
 
+echo "Adding support for XML (necessary for SVG)..."
+apk add php-xml
+
 echo "Changing PHP configuration..."
 sed -i 's/^post_max_size = .*/post_max_size = 64M/' /etc/php81/php.ini
 sed -i 's/^upload_max_filesize = .*/upload_max_filesize = 32M/' /etc/php81/php.ini
